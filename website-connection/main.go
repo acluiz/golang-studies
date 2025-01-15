@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 )
+
+const urlVerificationDelay = 5 * time.Second
 
 func welcome() {
 	nome := "Terráqueo"
@@ -39,11 +42,12 @@ func verifyWebsite(url string) {
 		return
 	}
 
-	if resp.StatusCode == 200  {
-		fmt.Printf("O site foi carregado com sucesso. Código de resposta: %v.\n\n", resp.StatusCode)
-	} else {
+	if resp.StatusCode != 200  {
 		fmt.Printf("O site está com problemas. Código de resposta: %v.\n\n", resp.StatusCode)
+		return
 	}
+	
+	fmt.Printf("O site foi carregado com sucesso. Código de resposta: %v.\n\n", resp.StatusCode)
 }
 
 func startMonitoring() {
@@ -56,30 +60,36 @@ func startMonitoring() {
 		"https://httpbin.org/status/200",
 	}
 
-	for _, url := range(sites) {
-		fmt.Printf("Verificando a url %s...\n", url)
-		
-		verifyWebsite(url)
+	for i := 0; i < 3; i++ {
+		for _, url := range(sites) {
+			fmt.Printf("Verificando a url %s...\n", url)
+			
+			verifyWebsite(url)
+		}
+
+		time.Sleep(urlVerificationDelay)
 	}
 }
 
 func main() {
 	welcome()
 
-	showOptions()
-
-	command := getCommand()
-
-	switch command {
-		case 0:
-			fmt.Println("Programa encerrado.")
-			os.Exit(0)
-		case 1:
-			startMonitoring()
-		case 2:
-			fmt.Println("Exibindo logs...")
-		default:
-			fmt.Println("Comando não reconhecido, tente novamente.")
-			os.Exit(-1)
+	for {
+		showOptions()
+	
+		command := getCommand()
+	
+		switch command {
+			case 0:
+				fmt.Println("Programa encerrado.")
+				os.Exit(0)
+			case 1:
+				startMonitoring()
+			case 2:
+				fmt.Println("Exibindo logs...")
+			default:
+				fmt.Println("Comando não reconhecido, tente novamente.")
+				os.Exit(-1)
+		}
 	}
 }
