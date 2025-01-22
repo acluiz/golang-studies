@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -50,15 +53,41 @@ func verifyWebsite(url string) {
 	fmt.Printf("O site foi carregado com sucesso. Código de resposta: %v.\n\n", resp.StatusCode)
 }
 
+func getWebsitesUrl() []string {
+	file, err := os.Open("./sites.txt")
+
+	if err != nil {
+		fmt.Println("Erro ao ler arquivo, tente novamente.")
+		os.Exit(-1)
+	}
+	
+	reader :=	bufio.NewReader(file)
+
+	var sites []string
+
+	for {
+		line, err := reader.ReadString('\n')
+
+		if err == io.EOF {
+			break
+		}
+		
+		if err != nil {
+			fmt.Println("Erro ao ler sites do arquivo, tente novamente.")
+			os.Exit(-1)
+		}
+
+		line = strings.TrimSpace(line)
+		sites = append(sites, line)
+	}
+
+	return sites
+}
+
 func startMonitoring() {
 	fmt.Printf("Iniciando monitoramento...\n\n")
 
-	sites := []string{
-		"https://httpbin.org/status/200",
-		"https://httpbin.org/status/200",
-		"https://httpbin.org/status/404",
-		"https://httpbin.org/status/200",
-	}
+	sites := getWebsitesUrl()
 
 	for i := 0; i < 3; i++ {
 		for _, url := range(sites) {
