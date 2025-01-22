@@ -68,17 +68,17 @@ func getWebsitesUrl() []string {
 	for {
 		line, err := reader.ReadString('\n')
 
-		if err == io.EOF {
-			break
-		}
-		
-		if err != nil {
+		if err != nil && err != io.EOF {
 			fmt.Println("Erro ao ler sites do arquivo, tente novamente.")
 			os.Exit(-1)
 		}
 
 		line = strings.TrimSpace(line)
 		sites = append(sites, line)
+
+		if err == io.EOF {
+			break
+		}
 	}
 
 	return sites
