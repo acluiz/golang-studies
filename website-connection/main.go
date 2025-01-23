@@ -46,15 +46,17 @@ func verifyWebsite(url string) {
 	}
 
 	if resp.StatusCode != 200  {
-		fmt.Printf("O site está com problemas. Código de resposta: %v.\n\n", resp.StatusCode)
+		fmt.Printf("O site está com problemas. Código de resposta: %v.\n", resp.StatusCode)
+		writeLog(url, false)
 		return
 	}
 	
-	fmt.Printf("O site foi carregado com sucesso. Código de resposta: %v.\n\n", resp.StatusCode)
+	fmt.Printf("O site foi carregado com sucesso. Código de resposta: %v.\n", resp.StatusCode)
+	writeLog(url, true)
 }
 
 func getWebsitesUrl() []string {
-	file, err := os.Open("./sites.txt")
+	file, err := os.Open("sites.txt")
 
 	if err != nil {
 		fmt.Println("Erro ao ler arquivo, tente novamente.")
@@ -81,6 +83,8 @@ func getWebsitesUrl() []string {
 		}
 	}
 
+	file.Close()
+
 	return sites
 }
 
@@ -98,6 +102,22 @@ func startMonitoring() {
 
 		time.Sleep(urlVerificationDelay)
 	}
+}
+
+func writeLog(url string, status bool) {
+	file, err := os.OpenFile("log.txt", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+
+	if err != nil {
+		fmt.Printf("Erro ao registrar log do site %s, tente novamente.\n\n", url)
+		return
+	}
+
+	fmt.Printf("Log registrado. \n\n")
+
+	datetime := time.Now().Format("02/01/2006 15:04:05")
+	file.WriteString(fmt.Sprintf("%s - %s - online: %t\n", datetime, url, status))
+
+	file.Close()
 }
 
 func main() {
