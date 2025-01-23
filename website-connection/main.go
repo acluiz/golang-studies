@@ -120,6 +120,33 @@ func writeLog(url string, status bool) {
 	file.Close()
 }
 
+func readLogs() {
+	file, err := os.Open("log.txt")
+
+	if err != nil {
+		fmt.Println("Erro ao ler arquivo, tente novamente.")
+		os.Exit(-1)
+	}
+
+	reader := bufio.NewReader(file)
+
+	for {
+		log, err := reader.ReadString('\n')
+
+		if err != nil && err != io.EOF {
+			fmt.Println("Erro ao ler logs, tente novamente.")
+			os.Exit(-1)
+		}
+
+		fmt.Print(log)
+		
+		if err == io.EOF {
+			fmt.Println()
+			break
+		}
+	}
+}
+
 func main() {
 	welcome()
 
@@ -135,7 +162,8 @@ func main() {
 			case 1:
 				startMonitoring()
 			case 2:
-				fmt.Println("Exibindo logs...")
+				fmt.Printf("Exibindo logs...\n\n")
+				readLogs()
 			default:
 				fmt.Println("Comando não reconhecido, tente novamente.")
 				os.Exit(-1)
