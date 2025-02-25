@@ -9,7 +9,7 @@ A collection of Go (Golang) exercises, examples, and projects for learning and i
 
 ## Projects
 
-- [Website Monitor](website-connection/main.go)
+- [Website Monitor](website-connection/main.go) - A tool that reads URLs from a txt file and verifies whether the websites are online or offline.
 
 ## How to Run
 
