@@ -12,16 +12,50 @@ type Account struct {
 	balance       float64
 }
 
-func (acc *Account) withdraw(withdrawValue float64) error {
-	if (withdrawValue <= 0){
-		return errors.New("invalid withdrawal value")
+func getCommand() int {
+	fmt.Println("Choose an action:")
+	fmt.Println("1) Deposit")
+	fmt.Println("2) Withdraw")
+	fmt.Println("3) Exit")
+
+	var command int
+	fmt.Scan(&command)
+
+	return command
+}
+
+func (acc *Account) deposit() error {
+	fmt.Println("How much you want to deposit?")
+
+	var amount float64
+	fmt.Scan(&amount)
+
+	if (amount <= 0){
+		return errors.New("invalid deposit amount")
+	}
+
+	acc.balance += amount
+
+	fmt.Printf("Deposit completed. New balance: %v.\n", acc.balance)
+
+	return nil
+}
+
+func (acc *Account) withdraw() error {
+	fmt.Println("How much you want to withdraw?")
+
+	var amount float64
+	fmt.Scan(&amount)
+
+	if (amount <= 0){
+		return errors.New("invalid withdrawal amount")
 	}
 	
-	if (withdrawValue > acc.balance){
-		return errors.New("withdrawal value higher than balance")
+	if (amount > acc.balance){
+		return errors.New("withdrawal amount is higher than the balance")
 	}
 	
-	acc.balance -= withdrawValue
+	acc.balance -= amount
 
 	fmt.Printf("Withdrawal completed. New balance: %v.\n", acc.balance)
 
@@ -36,13 +70,15 @@ func main() {
 		balance: 125.5,
 	}
 
-	withdrawValue := 2.0
+	command := getCommand()
 
-	err := acc.withdraw(withdrawValue)
-
-	if err != nil {
-		fmt.Println(err)
+	if command == 1 {
+		acc.deposit()
+		return
 	}
-
-	fmt.Println(acc)
+	
+	if command == 2 {
+		acc.withdraw()
+		return
+	}
 }
