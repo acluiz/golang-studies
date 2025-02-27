@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"golang-studies/bank/accounts"
+	"golang-studies/bank/customers"
 )
 
 
@@ -21,15 +22,27 @@ func getCommand() int {
 }
 
 func main() {
-	acc := accounts.Account{
-		HolderName    : "Ana",
+	holder := customers.Customer{
+		Name       : "Ana",
+		CPF        : "00000000000",
+		Ocuppation : "architect",
+	}
+
+	acc := accounts.CheckingAccount{
+		Holder        : holder,
 		BranchNumber  : "001",
 		AccountNumber : "01234",
-		Balance       : 377,
+		Balance       : 277,
+	}
+
+	holder2 := customers.Customer{
+		Name       : "Luiz",
+		CPF        : "00000000000",
+		Ocuppation : "engineer",
 	}
 	
-	acc2 := accounts.Account{
-		HolderName    : "Luiz",
+	acc2 := accounts.CheckingAccount{
+		Holder        : holder2,
 		BranchNumber  : "001",
 		AccountNumber : "67890",
 		Balance       : 125.5,

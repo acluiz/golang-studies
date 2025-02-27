@@ -3,16 +3,17 @@ package accounts
 import (
 	"errors"
 	"fmt"
+	"golang-studies/bank/customers"
 )
 
-type Account struct {
-	HolderName    string
+type CheckingAccount struct {
+	Holder        customers.Customer
 	BranchNumber  string
 	AccountNumber string
 	Balance       float64
 }
 
-func (acc *Account) deposit(amount float64) error {
+func (acc *CheckingAccount) deposit(amount float64) error {
 	if (amount <= 0){
 		return errors.New("invalid deposit amount")
 	}
@@ -22,7 +23,7 @@ func (acc *Account) deposit(amount float64) error {
 	return nil
 }
 
-func (acc *Account) withdraw(amount float64) error {
+func (acc *CheckingAccount) withdraw(amount float64) error {
 	if (amount <= 0){
 		return errors.New("invalid withdrawal amount")
 	}
@@ -36,7 +37,7 @@ func (acc *Account) withdraw(amount float64) error {
 	return nil
 }
 
-func (acc *Account) transfer(amount float64, receiverAcc *Account) error {
+func (acc *CheckingAccount) transfer(amount float64, receiverAcc *CheckingAccount) error {
 	if (amount <= 0){
 		return errors.New("invalid amount")
 	}
@@ -51,7 +52,11 @@ func (acc *Account) transfer(amount float64, receiverAcc *Account) error {
 	return nil
 }
 
-func (acc *Account) Deposit() {
+func (acc *CheckingAccount) ViewBalance() {
+	fmt.Printf("Current balance for %s: %.2f.\n\n", acc.Holder.Name, acc.Balance)
+}
+
+func (acc *CheckingAccount) Deposit() {
 	fmt.Println("How much you want to deposit?")
 
 	var amount float64
@@ -65,10 +70,10 @@ func (acc *Account) Deposit() {
 	}
 
 	fmt.Println("Deposit completed.")
-	fmt.Printf("New balance for %v: %v.\n", acc.HolderName, acc.Balance)
+	acc.ViewBalance()
 }
 
-func (acc *Account) Withdraw() {
+func (acc *CheckingAccount) Withdraw() {
 	fmt.Println("How much you want to withdraw?")
 
 	var amount float64
@@ -82,10 +87,10 @@ func (acc *Account) Withdraw() {
 	}
 
 	fmt.Println("Withdrawal completed.")
-	fmt.Printf("New balance for %v: %v.\n", acc.HolderName, acc.Balance)
+	acc.ViewBalance()
 }
 
-func (acc *Account) Transfer(receiverAcc *Account) {
+func (acc *CheckingAccount) Transfer(receiverAcc *CheckingAccount) {
 	fmt.Println("How much you want to transfer?")
 
 	var amount float64
@@ -100,6 +105,5 @@ func (acc *Account) Transfer(receiverAcc *Account) {
 
 	fmt.Println("Transfer completed.")
 	
-	fmt.Printf("New balance for %v: %v.\n", acc.HolderName, acc.Balance)
-	fmt.Printf("New balance for %v: %v.\n", receiverAcc.HolderName, receiverAcc.Balance)
+	acc.ViewBalance()
 }
