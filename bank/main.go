@@ -5,6 +5,7 @@ import (
 
 	"golang-studies/bank/accounts"
 	"golang-studies/bank/customers"
+	"golang-studies/bank/handlers"
 )
 
 
@@ -28,7 +29,7 @@ func main() {
 		Ocuppation : "architect",
 	}
 
-	acc := accounts.CheckingAccount{
+	acc := &accounts.CheckingAccount{
 		Holder        : holder,
 		BranchNumber  : "001",
 		AccountNumber : "01234",
@@ -41,7 +42,7 @@ func main() {
 		Ocuppation : "engineer",
 	}
 	
-	acc2 := accounts.CheckingAccount{
+	acc2 := &accounts.SavingAccount{
 		Holder        : holder2,
 		BranchNumber  : "001",
 		AccountNumber : "67890",
@@ -52,11 +53,11 @@ func main() {
 
 	switch command {
 		case 1:
-			acc.Deposit()
+			handlers.HandleDeposit(acc)
 		case 2:
-			acc.Withdraw()
+			handlers.HandleWithdraw(acc)
 		case 3:
-			acc.Transfer(&acc2)
+			handlers.HandleTransfer(acc, acc2)
 		default:
 			return
 	}

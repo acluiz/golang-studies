@@ -3,18 +3,9 @@ package accounts
 import (
 	"errors"
 	"fmt"
-	"golang-studies/bank/customers"
 )
 
-type SavingAccount struct {
-	Holder          customers.Customer
-	BranchNumber    string
-	AccountNumber   string
-	TransactionCode string
-	Balance         float64
-}
-
-func (acc *SavingAccount) deposit(amount float64) error {
+func (acc *SavingAccount) Deposit(amount float64) error {
 	if (amount <= 0){
 		return errors.New("invalid deposit amount")
 	}
@@ -24,7 +15,26 @@ func (acc *SavingAccount) deposit(amount float64) error {
 	return nil
 }
 
-func (acc *SavingAccount) withdraw(amount float64) error {
+func (acc *SavingAccount) Transfer(amount float64, receiverAcc Account) error {
+	if (amount <= 0){
+		return errors.New("invalid amount")
+	}
+
+	if acc.Balance < amount {
+		return errors.New("insufficient balance")
+	}
+
+	acc.Withdraw(amount)
+	receiverAcc.Deposit(amount)
+
+	return nil
+}
+
+func (acc *SavingAccount) ViewBalance() {
+	fmt.Printf("Current balance for %s: %.2f.\n", acc.Holder.Name, acc.Balance)
+}
+
+func (acc *SavingAccount) Withdraw(amount float64) error {
 	if (amount <= 0){
 		return errors.New("invalid withdrawal amount")
 	}
@@ -36,42 +46,4 @@ func (acc *SavingAccount) withdraw(amount float64) error {
 	acc.Balance -= amount
 
 	return nil
-}
-
-func (acc *SavingAccount) ViewBalance() {
-	fmt.Printf("Current balance for %s: %.2f.\n\n", acc.Holder.Name, acc.Balance)
-}
-
-func (acc *SavingAccount) Deposit() {
-	fmt.Println("How much you want to deposit?")
-
-	var amount float64
-	fmt.Scan(&amount)
-
-	err := acc.deposit(amount)
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println("Deposit completed.")
-	acc.ViewBalance()
-}
-
-func (acc *SavingAccount) Withdraw() {
-	fmt.Println("How much you want to withdraw?")
-
-	var amount float64
-	fmt.Scan(&amount)
-
-	err := acc.withdraw(amount)
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println("Withdrawal completed.")
-	acc.ViewBalance()
 }
