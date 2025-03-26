@@ -10,6 +10,7 @@ A collection of Go (Golang) exercises, examples, and projects for learning and i
 ## Projects
 
 - [Website Monitor](website-connection/main.go) - A tool that reads URLs from a txt file and verifies whether the websites are online or offline.
+- [Bank](bank/main.go) - A simple Golang bank simulation handling deposits, withdrawals, transfers, and balance inquiries without a database
 
 ## How to Run
 
