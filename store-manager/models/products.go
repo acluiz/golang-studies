@@ -1,6 +1,8 @@
 package models
 
-import "golang-studies/store-manager/db"
+import (
+	"golang-studies/store-manager/db"
+)
 
 
 type Product struct {
@@ -46,4 +48,18 @@ func GetProducts() []Product {
 	defer db.Close()
 
 	return products
+}
+
+func AddProduct(name, description string, price float64, quantity int) {
+	db := db.ConnectDatabase()
+
+	insert, err := db.Prepare("insert into products(name, description, price, quantity) values($1, $2, $3, $4)")
+
+	if (err != nil) {
+		panic(err)
+	}
+
+	insert.Exec(name, description, price, quantity)
+	
+	defer db.Close()
 }

@@ -5,7 +5,9 @@ import (
 	"net/http"
 )
 
-
 func LoadRoutes() {
 	http.HandleFunc("/", c.Index)
+	http.HandleFunc("/novo-produto", c.NewProduct)
+	
+	http.HandleFunc("/insert", c.Insert)
 }
