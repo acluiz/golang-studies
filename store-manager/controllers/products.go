@@ -20,6 +20,14 @@ func NewProduct(w http.ResponseWriter, r *http.Request) {
 	temp.ExecuteTemplate(w, "NewProduct", nil)
 }
 
+func Edit(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+
+	product := m.GetProduct(id)
+
+	temp.ExecuteTemplate(w, "Edit", product)
+}
+
 func Insert(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		name := r.FormValue("name")
@@ -39,6 +47,30 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 
 		m.AddProduct(name, description, price, quantity)
 
+		http.Redirect(w, r, "/", 301)
+	}
+}
+
+func Update(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		id := r.FormValue("id")
+		name := r.FormValue("name")
+		description := r.FormValue("description")
+		
+		price, err := strconv.ParseFloat(r.FormValue("price"), 64)
+		
+		if err != nil {
+			fmt.Println("Falha ao converter preço")
+		}
+
+		quantity, err := strconv.Atoi(r.FormValue("quantity"))
+	
+		if err != nil {
+			fmt.Println("Falha ao converter quantidade")
+		}
+
+		m.UpdateProduct(id, name, description, price, quantity)
+		
 		http.Redirect(w, r, "/", 301)
 	}
 }
