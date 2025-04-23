@@ -5,11 +5,17 @@ import (
 	"net/http"
 
 	c "golang-studies/figures/controllers"
+
+	"github.com/gorilla/mux"
 )
 
 func HandleRequest() {
-	http.HandleFunc("/", c.Home)
-	http.HandleFunc("/figures", c.GetFigures)
+	r := mux.NewRouter()
+
+	r.HandleFunc("/", c.Home)
 	
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	r.HandleFunc("/api/figures", c.GetFigures).Methods("Get")
+	r.HandleFunc("/api/figures/{id}", c.GetFigure).Methods("Get")
+	
+	log.Fatal(http.ListenAndServe(":8000", r))
 }
