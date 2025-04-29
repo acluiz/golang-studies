@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	db "golang-studies/figures/database"
 	m "golang-studies/figures/models"
 	"net/http"
 	"strconv"
@@ -15,7 +16,11 @@ func Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetFigures(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(m.Figures)
+	var f []m.Figure
+
+	db.DB.Find(&f)
+
+	json.NewEncoder(w).Encode(f)
 }
 
 func GetFigure(w http.ResponseWriter, r *http.Request) {

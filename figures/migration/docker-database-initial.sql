@@ -1,4 +1,4 @@
-create table figures(
+CREATE TABLE figures(
     id serial primary key,
     name varchar,
     story varchar
