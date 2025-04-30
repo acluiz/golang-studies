@@ -15,6 +15,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetFigures(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+
 	var f []m.Figure
 
 	db.DB.Find(&f)
@@ -23,6 +25,8 @@ func GetFigures(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetFigure(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+
 	vars := mux.Vars(r)
 
 	id := vars["id"]
@@ -35,6 +39,8 @@ func GetFigure(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateFigure(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+
 	var f m.Figure
 
 	json.NewDecoder(r.Body).Decode(&f)
@@ -45,6 +51,8 @@ func CreateFigure(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateFigure(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+
 	vars := mux.Vars(r)
 
 	id := vars["id"]
@@ -61,6 +69,8 @@ func UpdateFigure(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteFigure(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+
 	vars := mux.Vars(r)
 	
 	id := vars["id"]
