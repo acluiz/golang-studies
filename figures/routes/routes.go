@@ -7,6 +7,7 @@ import (
 	c "golang-studies/figures/controllers"
 	mw "golang-studies/figures/middleware"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -24,5 +25,5 @@ func HandleRequest() {
 	r.HandleFunc("/api/figures/{id}", c.UpdateFigure).Methods("Put")
 	r.HandleFunc("/api/figures/{id}", c.DeleteFigure).Methods("Delete")
 	
-	log.Fatal(http.ListenAndServe(":8000", r))
+	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedOrigins([]string{"*"}))(r)))
 }
