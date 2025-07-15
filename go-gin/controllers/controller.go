@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	db "golang-studies/go-gin/database"
 	m "golang-studies/go-gin/models"
 )
 
@@ -21,4 +22,18 @@ func Greeting(c *gin.Context) {
 		"name": name,
 		"greeting": greeting,
 	})
+}
+
+func CreateStudent(c *gin.Context) {
+	var student m.Student
+
+	if err := c.ShouldBindJSON(&student); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+	}
+
+	db.DB.Create(&student)
+
+	c.JSON(http.StatusOK, student)
 }
