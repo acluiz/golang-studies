@@ -48,3 +48,11 @@ func CreateStudent(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, student)
 }
+
+func DeleteStudent(c *gin.Context) {
+	id := c.Param("id")
+
+	db.DB.Delete(&m.Student{}, id)
+
+	c.JSON(http.StatusNoContent, gin.H{})
+}
