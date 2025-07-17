@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,17 +10,29 @@ import (
 )
 
 func GetStudents(c *gin.Context) {
-	c.JSON(http.StatusOK, m.Students)
+	var students []m.Student
+
+	db.DB.Find(&students)
+
+	c.JSON(http.StatusOK, students)
 }
 
-func Greeting(c *gin.Context) {
-	name := c.Param("name")
-	greeting := fmt.Sprintf("Hello, %s!", name)
+func GetStudent(c *gin.Context) {
+	var student m.Student
 
-	c.JSON(http.StatusOK, gin.H{
-		"name": name,
-		"greeting": greeting,
-	})
+	id := c.Param("id")
+
+	db.DB.First(&student, id)
+
+	if student.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "student not found",
+		})
+
+		return
+	}
+
+	c.JSON(http.StatusOK, student)
 }
 
 func CreateStudent(c *gin.Context) {
@@ -35,5 +46,5 @@ func CreateStudent(c *gin.Context) {
 
 	db.DB.Create(&student)
 
-	c.JSON(http.StatusOK, student)
+	c.JSON(http.StatusCreated, student)
 }

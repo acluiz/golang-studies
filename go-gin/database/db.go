@@ -5,8 +5,6 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-
-	m "golang-studies/go-gin/models"
 )
 
 var (
@@ -21,6 +19,4 @@ func ConnectDatabase(){
 	if err != nil {
 		log.Panic("error while connecting with database")
 	}
-
-	DB.AutoMigrate(&m.Students)
 }
