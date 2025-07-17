@@ -49,6 +49,34 @@ func CreateStudent(c *gin.Context) {
 	c.JSON(http.StatusCreated, student)
 }
 
+func UpdateStudent(c *gin.Context) {
+	var student m.Student
+
+	id := c.Param("id")
+
+	db.DB.First(&student, id)
+
+	if student.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "student not found",
+		})
+
+		return
+	}
+
+	if err := c.ShouldBindJSON(&student); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+
+		return
+	}
+
+	db.DB.Model(&student).UpdateColumns(student)
+
+	c.JSON(http.StatusOK, student)
+}
+
 func DeleteStudent(c *gin.Context) {
 	id := c.Param("id")
 

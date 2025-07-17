@@ -13,6 +13,7 @@ func HandleRequests() {
 	r.POST("/alunos", c.CreateStudent)
 
 	r.GET("/alunos/:id", c.GetStudent)
+	r.PUT("/alunos/:id", c.UpdateStudent)
 	r.DELETE("/alunos/:id", c.DeleteStudent)
 
 	r.Run()
